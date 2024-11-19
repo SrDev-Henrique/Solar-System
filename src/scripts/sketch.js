@@ -4,15 +4,16 @@
 let sun;
 let planets = [];
 let G = 0.3;
-let numPlanets = 5;
+let numPlanets = 15;
+let destabilise = 2;
 let canvas;
-let planetTextures = []; // Para armazenar texturas
+let imgTexture1, imgTexture2, imgTexture3, imgTexture4;
 
 function preload() {
-  // Carregar texturas para os planetas
-  for (let i = 1; i <= 4; i++) {
-    planetTextures.push(loadImage(`images/planet${i}.jpg`)); // Adicione planet1.jpg, planet2.jpg etc.
-  }
+  imgTexture1 = loadImage("../dist/images/planet1.jpg");
+  imgTexture2 = loadImage("../dist/images/planet2.jpg");
+  imgTexture3 = loadImage("../dist/images/planet3.jpg");
+  imgTexture4 = loadImage("../dist/images/planet4.jpg");
 }
 
 function setup() {
@@ -21,7 +22,7 @@ function setup() {
   canvas.style("z-index", "-1");
 
   // Criar o Sol
-  sun = new Body(0, 0, 100, 500, "Star");
+  sun = new Body(0, 0, 50, 200, "Star");
 
   // Criar planetas
   for (let i = 0; i < numPlanets; i++) {
@@ -40,13 +41,40 @@ function createRandomPlanet(index) {
   let vel = createVector(-y, x).normalize();
   vel.mult(sqrt((G * sun.mass) / r));
 
-  // Escolher textura aleatória
-  let texture = planetTextures[index % planetTextures.length];
-
   // Criar planeta
-  let radius = random(20, 50);
+  let radius = random(10, 15);
   let mass = radius ** 2;
-  planets.push(new Body(x, y, radius, mass, "Planet", vel, texture));
+
+  if (random(1) < 0.2) {
+    vel.mult(-1);
+  }
+
+  planets.push(new Body(x, y, radius, mass, "Planet", vel));
+}
+
+function updatePlanetVelocities() {
+  for (let i = 0; i < planets.length; i++) {
+    let planet = planets[i];
+
+    // Vetor da posição do planeta em relação ao Sol
+    let planetPos = createVector(planet.x - sun.x, planet.y - sun.y);
+
+    // Criar o vetor de velocidade orbital
+    let planetVel = planetPos.copy();
+    planetVel.rotate(HALF_PI); // Rotaciona 90° para criar a órbita
+    planetVel.setMag(sqrt((G * sun.mass) / planetPos.mag())); // Define a magnitude da velocidade orbital
+
+    // Aleatoriamente inverter a direção do movimento orbital
+    if (random(1) < 0.2) {
+      planetVel.mult(-1);
+    }
+
+    // Destabilizar a velocidade para criar variação
+    planetVel.mult(random(1 - destabilise, 1 + destabilise));
+
+    // Atualizar a velocidade do planeta
+    planet.vel = planetVel;
+  }
 }
 
 function draw() {
@@ -55,8 +83,8 @@ function draw() {
   noStroke();
 
   // Iluminação
-  ambientLight(50); // Luz ambiente fraca
-  directionalLight(255, 255, 200, -1, -1, -1); // Luz direcional do Sol
+  ambientLight(20); // Luz ambiente fraca
+  pointLight(255, 255, 200, sun.x, sun.y, +40); // Luz direcional do Sol
 
   // Desenhar o Sol
   sun.draw();
@@ -84,7 +112,6 @@ function Body(
   mass,
   type,
   velocity = createVector(0, 0),
-  texture = null
 ) {
   this.x = x;
   this.y = y;
@@ -93,7 +120,6 @@ function Body(
   this.mass = mass;
   this.type = type;
   this.vel = velocity;
-  this.texture = texture;
 
   this.update = function () {
     this.x += this.vel.x;
@@ -103,7 +129,12 @@ function Body(
   this.draw = function () {
     push();
     translate(this.x, this.y, this.z);
-
+    if (this.type === "Planet") {
+      texture(imgTexture1);
+    }
+    if (this.type === "Star") {
+      emissiveMaterial(255, 204, 0); // Cor emissiva para o Sol
+    }
     sphere(this.radius);
     pop();
   };
@@ -121,35 +152,28 @@ function Body(
 }
 
 function checkCollision(planetA, planetB) {
-  let d = dist(planetA.pos.x, planetA.pos.y, planetB.pos.x, planetB.pos.y);
+  let d = dist(planetA.x, planetA.y, planetB.x, planetB.y);
 
-  if (d < planetA.r / 2 + planetB.r / 2) {
-    let normal = p5.Vector.sub(planetB.pos, planetA.pos).normalize();
+  if (d < planetA.radius + planetB.radius) {
+    // Calcular o vetor normal entre os dois planetas
+    let normal = createVector(
+      planetB.x - planetA.x,
+      planetB.y - planetA.y
+    ).normalize();
+
+    // Velocidade relativa
     let relativeVelocity = p5.Vector.sub(planetB.vel, planetA.vel);
     let speed = relativeVelocity.dot(normal);
 
+    // Se as velocidades já estão se afastando, não faz nada
     if (speed > 0) return;
 
-    let impulse = p5.Vector.mult(normal, speed / (planetA.mass + planetB.mass));
+    // Calcular o impulso baseado nas massas
+    let impulse = normal.copy().mult(speed / (planetA.mass + planetB.mass));
 
+    // Ajustar as velocidades de acordo com o impulso
     planetA.vel.sub(p5.Vector.mult(impulse, -planetB.mass));
     planetB.vel.add(p5.Vector.mult(impulse, -planetA.mass));
-
-    let massLoss = min(planetA.mass, planetB.mass) * 0.2;
-
-    planetA.mass -= massLoss;
-    planetB.mass -= massLoss;
-
-    planetA.r = Math.sqrt(planetA.mass) * 5;
-    planetB.r = Math.sqrt(planetB.mass) * 5;
-
-    let numParticles = 2;
-    for (let i = 0; i < numParticles; i++) {
-      let velocity = p5.Vector.random2D();
-      let mass = random(5, 10);
-      let particle = new Particle(planetA.pos.x, planetA.pos.y, mass, velocity);
-      particles.push(particle);
-    }
   }
 }
 
