@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../dev/styles/style.css" />
+    <title>Sistema Solar</title>
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+
+    <section id="top-nav" class="active">
+      <nav class="sim-actions">
+        <ul class="actions">
+          <div class="border">
+            <li class="info labeled">
+            <button onclick="openObjInfo()" id="infobtn" type="button">
+              <i class='bx bx-planet'></i>
+            </button>
+            <div class="label">
+                Detalhes
+              </div>
+          </li>
+          </div>
+
+          <div class="border">
+            <li class="add labeled">
+            <button onclick="addBodyForm()" id="addbtn" type="button">
+              <i class='bx bxs-message-square-add'></i>
+            </button>
+            <div class="label">
+                Adicionar
+              </div>
+          </li>
+          </div>
+
+          <div class="border">
+            <li>
+            <button
+            onclick="updatePlanetVelocities()"
+            class="destabilize"
+            type="button"
+          >
+              <p>Desestabilizar</p>
+            </button>
+          </li>
+          </div>
+
+          <li>
+            <button onclick="destroySystem()" class="destroy" type="button">
+              <p>Destruir</p>
+            </button>
+          </li>
+          
+      </nav>
+    </section>
+
+    <div class="call-options active">
+      <p class="option-p">Opções</p>
+      <p class="close-options">X</p>
+    </div>
+
+    <section class="add-menu">
+      <div class="bodies-selection">
+        
+      </div>
+    </section>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="scripts/sketch.js"></script>
+    <script src="scripts/particles.js"></script>
+  </body>
+</html>
