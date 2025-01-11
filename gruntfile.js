@@ -78,5 +78,5 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-replace");
 
   grunt.registerTask("default", ["watch"]);
-  grunt.registerTask("build", ["less:production", "copy:production"]);
+  grunt.registerTask("build", ["less:production", "copy:production", "replace:production"]);
 };
