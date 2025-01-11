@@ -56,7 +56,15 @@ module.exports = function (grunt) {
           patterns: [
             {
               match: /dev\/styles\/style\.css/g,
-              replacement: "dist/styles/style.min.css",
+              replacement: "styles/style.min.css",
+            },
+            {
+              match: /src\/scripts\/script\.js/g,
+              replacement: "scripts/script.min.js",
+            },
+            {
+              match: /src\/scripts\/sketch\.js/g,
+              replacement: "scripts/script.min.js",
             },
           ],
         },
@@ -76,6 +84,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks("grunt-contrib-watch");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-replace");
+  grunt.loadNpmTasks("grunt-contrib-uglify");
 
   grunt.registerTask("default", ["watch"]);
   grunt.registerTask("build", ["less:production", "copy:production", "replace:production"]);
