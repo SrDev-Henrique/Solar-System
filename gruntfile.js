@@ -50,11 +50,32 @@ module.exports = function (grunt) {
         tasks: ["copy:development"],
       },
     },
+    replace: {
+      production: {
+        options: {
+          patterns: [
+            {
+              match: /dev\/styles\/style\.css/g,
+              replacement: "dist/styles/style.min.css",
+            },
+          ],
+        },
+        files: [
+          {
+            expand: true,
+            flatten: true,
+            src: ["index.html"],
+            dest: "dist/",
+          },
+        ],
+      },
+    },
   });
 
   grunt.loadNpmTasks("grunt-contrib-less");
   grunt.loadNpmTasks("grunt-contrib-watch");
   grunt.loadNpmTasks("grunt-contrib-copy");
+  grunt.loadNpmTasks("grunt-replace");
 
   grunt.registerTask("default", ["watch"]);
   grunt.registerTask("build", ["less:production", "copy:production"]);
