@@ -67,15 +67,15 @@ module.exports = function (grunt) {
           patterns: [
             {
               match: "ENDEREÇO_DO_CSS",
-              replacement: "./styles/style.min.css",
+              replacement: "styles/style.min.css",
             },
             {
               match: "ENDEREÇO_DO_JS_1",
-              replacement: "../src/scripts/script.js",
+              replacement: "scripts/script.min.js",
             },
             {
               match: "ENDEREÇO_DO_JS_2",
-              replacement: "../src/scripts/sketch.js",
+              replacement: "scripts/sketch.min.js",
             },
           ],
         },
