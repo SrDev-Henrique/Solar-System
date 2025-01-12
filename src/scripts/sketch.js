@@ -24,8 +24,18 @@ function preload() {
 }
 
 function setup() {
+  // Obtém o elemento do contêiner do canvas
+  const canvasContainer = document.getElementById("canvas-container");
+
   // Cria um canvas em modo WEBGL
-  canvas = createCanvas(windowWidth, windowHeight, WEBGL);
+  canvas = createCanvas(
+    canvasContainer.offsetWidth,
+    canvasContainer.offsetHeight,
+    WEBGL
+  );
+  canvas.parent("canvas-container");
+
+  document.body.style.margin = "0";
 
   // Cria o Sol
   sun = new Body(0, 0, 50, 200, "Star");
@@ -207,5 +217,6 @@ function checkCollision(planetA, planetB) {
 
 // Redimensiona o canvas quando a janela é redimensionada
 function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
+  const canvasContainer = document.getElementById("canvas-container");
+  resizeCanvas(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
 }
