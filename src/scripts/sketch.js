@@ -10,10 +10,10 @@ let canvas;
 let imgTexture1, imgTexture2, imgTexture3, imgTexture4;
 
 function preload() {
-  imgTexture1 = loadImage("../dist/images/planet1.jpg");
-  imgTexture2 = loadImage("../dist/images/planet2.jpg");
-  imgTexture3 = loadImage("../dist/images/planet3.jpg");
-  imgTexture4 = loadImage("../dist/images/planet4.jpg");
+  imgTexture1 = loadImage("images/planet1.jpg");
+  imgTexture2 = loadImage("images/planet2.jpg");
+  imgTexture3 = loadImage("images/planet3.jpg");
+  imgTexture4 = loadImage("images/planet4.jpg");
 }
 
 function setup() {
