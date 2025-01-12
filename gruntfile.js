@@ -110,12 +110,6 @@ module.exports = function (grunt) {
             src: ["**"],
             dest: "dev/images/",
           },
-          {
-            expand: true,
-            cwd: "src/skybox/",
-            src: ["**"],
-            dest: "dev/skybox/",
-          },
         ],
       },
       production: {
@@ -125,12 +119,6 @@ module.exports = function (grunt) {
             cwd: "src/images/",
             src: ["**"],
             dest: "dist/images/",
-          },
-          {
-            expand: true,
-            cwd: "src/skybox/",
-            src: ["**"],
-            dest: "dist/skybox/",
           },
         ],
       },
@@ -150,7 +138,7 @@ module.exports = function (grunt) {
         tasks: ["replace:dev"],
       },
       images: {
-        files: ["src/images/**", "src/skybox/**"],
+        files: ["src/images/**"],
         tasks: ["copy:development"],
       },
     },
