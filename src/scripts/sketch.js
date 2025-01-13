@@ -1,7 +1,8 @@
 let sun; // Sol
 let planets = []; // Array para armazenar os planetas
 let G = 0.3; // Constante gravitacional
-let numPlanets = 15; // Número de planetas
+let isMobile = window.innerWidth <= 768; // Verifica se é um dispositivo móvel
+let numPlanets = isMobile ? 6 : 15; // Número de planetas
 let destabilise = 2; // Fator de desestabilização das órbitas
 let canvas; // Referência ao canvas
 let planetTextures = []; // Array para armazenar as texturas dos planetas
